@@ -1,6 +1,8 @@
 <resources>
 
     <style name="Widget.MPM.Menu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:colorBackground">@color/mpm_material_grey_50</item>
+        <item name="android:theme">@style/Theme.AppCompat.Light</item>
         <item name="mpm_primaryTextColor">@color/mpm_black_87_opacity</item>
         <item name="mpm_secondaryTextColor">@color/mpm_black_54_opacity</item>
         <item name="mpm_activeIconColor">@color/mpm_black_54_opacity</item>
@@ -8,6 +10,8 @@
     </style>
 
     <style name="Widget.MPM.Menu.Dark">
+        <item name="android:colorBackground">@color/mpm_material_grey_850</item>
+        <item name="android:theme">@style/Theme.AppCompat</item>
         <item name="mpm_primaryTextColor">@color/mpm_white</item>
         <item name="mpm_secondaryTextColor">@color/mpm_white_70_opacity</item>
         <item name="mpm_activeIconColor">@color/mpm_white</item>

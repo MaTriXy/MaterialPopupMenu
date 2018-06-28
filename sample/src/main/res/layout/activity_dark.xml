@@ -63,13 +63,31 @@
                 app:layout_constraintTop_toBottomOf="@+id/sectionsWithTitlesTextView" />
 
             <TextView
+                android:id="@+id/customColorsTextView"
+                style="@style/TitleLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_colors"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sectionsWithoutTitlesTextView" />
+
+            <TextView
+                android:id="@+id/customItemsTextView"
+                style="@style/TitleLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_items"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sectionsWithoutTitlesTextView" />
+
+            <TextView
                 android:id="@+id/conditionalItemsTextView"
                 style="@style/TitleLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/conditional_items"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sectionsWithoutTitlesTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/customColorsTextView" />
 
             <TextView
                 android:id="@+id/conditionalItemsCopySubtitleTextView"

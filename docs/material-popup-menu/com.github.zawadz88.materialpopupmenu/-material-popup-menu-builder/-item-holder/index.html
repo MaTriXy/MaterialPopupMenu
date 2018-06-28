@@ -5,10 +5,10 @@
 <link rel="stylesheet" href="../../../../style.css">
 </HEAD>
 <BODY>
-<a href="../../../index.html">material-popup-menu</a>&nbsp;/&nbsp;<a href="../../index.html">com.github.zawadz88.materialpopupmenu</a>&nbsp;/&nbsp;<a href="../index.html">MaterialPopupMenuBuilder</a>&nbsp;/&nbsp;<a href=".">ItemHolder</a><br/>
+<a href="../../../index.html">material-popup-menu</a>&nbsp;/&nbsp;<a href="../../index.html">com.github.zawadz88.materialpopupmenu</a>&nbsp;/&nbsp;<a href="../index.html">MaterialPopupMenuBuilder</a>&nbsp;/&nbsp;<a href="./index.html">ItemHolder</a><br/>
 <br/>
 <h1>ItemHolder</h1>
-<code><span class="keyword">class </span><span class="identifier">ItemHolder</span></code>
+<code><span class="keyword">class </span><span class="identifier">ItemHolder</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-abstract-item-holder/index.html"><span class="identifier">AbstractItemHolder</span></a></code>
 <p>Holds section item info for the builder. This gets converted to <a href="#">MaterialPopupMenu.PopupMenuItem</a>.</p>
 <h3>Constructors</h3>
 <table>
@@ -29,19 +29,28 @@
 <tbody>
 <tr>
 <td>
-<p><a href="callback.html">callback</a></p>
-</td>
-<td>
-<code><span class="keyword">var </span><span class="identifier">callback</span><span class="symbol">: </span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
-<p>Callback to be invoked once an item gets selected.</p>
-</td>
-</tr>
-<tr>
-<td>
 <p><a href="icon.html">icon</a></p>
 </td>
 <td>
 <code><span class="keyword">var </span><span class="identifier">icon</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code>
+<p>Optional icon to be displayed together with the label.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="icon-color.html">iconColor</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">iconColor</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code>
+<p>Optional icon tint color.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="icon-drawable.html">iconDrawable</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">iconDrawable</span><span class="symbol">: </span><a href="https://developer.android.com/reference/android/graphics/drawable/Drawable.html"><span class="identifier">Drawable</span></a><span class="symbol">?</span></code>
 <p>Optional icon to be displayed together with the label.</p>
 </td>
 </tr>
@@ -52,6 +61,29 @@
 <td>
 <code><span class="keyword">var </span><span class="identifier">label</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code>
 <p>Item label. This is a required field and must not be <em>null</em>.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="label-color.html">labelColor</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">labelColor</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code>
+<p>Optional text color of the label. If not set or 0 the default color will be used.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../-abstract-item-holder/callback.html">callback</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">callback</span><span class="symbol">: </span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Callback to be invoked once an item gets selected.</p>
 </td>
 </tr>
 </tbody>

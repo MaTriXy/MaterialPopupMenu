@@ -40,4 +40,8 @@
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Caption</item>
     </style>
 
+    <style name="Widget.MPM.Menu.Dark.CustomBackground">
+        <item name="android:colorBackground">@color/colorPrimary</item>
+    </style>
+
 </resources>

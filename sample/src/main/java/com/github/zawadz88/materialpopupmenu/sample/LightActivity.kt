@@ -3,6 +3,7 @@ package com.github.zawadz88.materialpopupmenu.sample
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SwitchCompat
 import android.support.v7.widget.Toolbar
@@ -10,6 +11,7 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.CheckBox
 import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -59,7 +61,7 @@ class LightActivity : AppCompatActivity() {
                     }
                     item {
                         label = "Paste"
-                        icon = R.drawable.abc_ic_menu_paste_mtrl_am_alpha
+                        iconDrawable = ContextCompat.getDrawable(this@LightActivity, R.drawable.abc_ic_menu_paste_mtrl_am_alpha)
                     }
                 }
                 section {
@@ -192,6 +194,77 @@ class LightActivity : AppCompatActivity() {
                     callback = {
                         shareUrl()
                     }
+                }
+            }
+        }
+
+        popupMenu.show(this@LightActivity, view)
+    }
+
+    @OnClick(R.id.customColorsTextView)
+    fun onCustomColorsClicked(view: View) {
+        val popupMenu = popupMenu {
+            style = R.style.Widget_MPM_Menu_Dark_CustomBackground
+            section {
+                item {
+                    label = "Copy"
+                    labelColor = ContextCompat.getColor(this@LightActivity, R.color.red)
+                    icon = R.drawable.abc_ic_menu_copy_mtrl_am_alpha
+                    iconColor = ContextCompat.getColor(this@LightActivity, R.color.dark_red)
+                    callback = {
+                        Toast.makeText(this@LightActivity, "Copied!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                item {
+                    label = "Paste"
+                    labelColor = ContextCompat.getColor(this@LightActivity, R.color.red)
+                    icon = R.drawable.abc_ic_menu_paste_mtrl_am_alpha
+                    iconColor = ContextCompat.getColor(this@LightActivity, R.color.dark_red)
+                    callback = {
+                        Toast.makeText(this@LightActivity, "Text pasted!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            section {
+                item {
+                    label = "Share"
+                    labelColor = ContextCompat.getColor(this@LightActivity, R.color.green)
+                    icon = R.drawable.abc_ic_menu_share_mtrl_alpha
+                    iconColor = ContextCompat.getColor(this@LightActivity, R.color.dark_green)
+                    callback = {
+                        shareUrl()
+                    }
+                }
+            }
+        }
+
+        popupMenu.show(this@LightActivity, view)
+    }
+
+    @OnClick(R.id.customItemsTextView)
+    fun onCustomItemsClicked(view: View) {
+        val popupMenu = popupMenu {
+            dropdownGravity = Gravity.END
+            section {
+                item {
+                    label = "Copy"
+                    icon = R.drawable.abc_ic_menu_copy_mtrl_am_alpha
+                    callback = {
+                        Toast.makeText(this@LightActivity, "Copied!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                customItem {
+                    layoutResId = R.layout.view_custom_item_checkable
+                    viewBoundCallback = { view ->
+                        val checkBox: CheckBox = view.findViewById(R.id.customItemCheckbox)
+                        checkBox.isChecked = true
+                    }
+                    callback = {
+                        Toast.makeText(this@LightActivity, "Disabled!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                customItem {
+                    layoutResId = R.layout.view_custom_item_large
                 }
             }
         }

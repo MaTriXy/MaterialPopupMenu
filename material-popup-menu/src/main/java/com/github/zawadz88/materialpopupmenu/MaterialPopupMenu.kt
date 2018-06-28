@@ -1,9 +1,8 @@
 package com.github.zawadz88.materialpopupmenu
 
 import android.content.Context
-import android.support.annotation.DrawableRes
-import android.support.annotation.StyleRes
-import android.support.annotation.UiThread
+import android.graphics.drawable.Drawable
+import android.support.annotation.*
 import android.support.v7.widget.MaterialRecyclerViewPopupWindow
 import android.view.View
 import com.github.zawadz88.materialpopupmenu.internal.PopupMenuAdapter
@@ -19,9 +18,11 @@ import com.github.zawadz88.materialpopupmenu.internal.PopupMenuAdapter
  * @author Piotr Zawadzki
  */
 class MaterialPopupMenu internal constructor(
-        internal @StyleRes val style: Int,
+        @StyleRes internal val style: Int,
         internal val dropdownGravity: Int,
         internal val sections: List<PopupMenuSection>) {
+
+    private var popupWindow: MaterialRecyclerViewPopupWindow? = null
 
     /**
      * Shows a popup menu in the UI.
@@ -39,17 +40,40 @@ class MaterialPopupMenu internal constructor(
         popupWindow.anchorView = anchor
 
         popupWindow.show()
+        this.popupWindow = popupWindow
+    }
+
+    /**
+     * Dismisses the popup window.
+     */
+    @UiThread
+    fun dismiss() {
+        this.popupWindow?.dismiss()
     }
 
     internal data class PopupMenuSection(
             val title: String?,
-            val items: List<PopupMenuItem>
+            val items: List<AbstractPopupMenuItem>
     )
 
     internal data class PopupMenuItem(
             val label: String,
+            @ColorInt val labelColor: Int,
             @DrawableRes val icon: Int,
-            val callback: () -> Unit
+            val iconDrawable: Drawable?,
+            @ColorInt val iconColor: Int,
+            override val callback: () -> Unit
+    ) : AbstractPopupMenuItem(callback)
+
+    internal data class PopupMenuCustomItem(
+            @LayoutRes val layoutResId: Int,
+            val viewBoundCallback: (View) -> Unit,
+            override val callback: () -> Unit
+    ) : AbstractPopupMenuItem(callback)
+
+
+    internal abstract class AbstractPopupMenuItem(
+            open val callback: () -> Unit
     )
 
 }
