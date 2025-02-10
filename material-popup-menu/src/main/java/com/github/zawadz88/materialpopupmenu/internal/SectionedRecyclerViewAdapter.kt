@@ -16,8 +16,8 @@ package com.github.zawadz88.materialpopupmenu.internal
  * limitations under the License.
  */
 
-import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * An extension to RecyclerView.Adapter to provide sections with headers to a
@@ -30,7 +30,7 @@ import android.view.ViewGroup
  * @param H  Class extending RecyclerView.ViewHolder to hold and bind the header view
  * @param VH Class extending RecyclerView.ViewHolder to hold and bind the items view
  * */
-abstract class SectionedRecyclerViewAdapter<H : RecyclerView.ViewHolder, VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+internal abstract class SectionedRecyclerViewAdapter<H : RecyclerView.ViewHolder, VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var sectionForPosition: IntArray? = null
     private var positionWithinSection: IntArray? = null
@@ -118,7 +118,6 @@ abstract class SectionedRecyclerViewAdapter<H : RecyclerView.ViewHolder, VH : Re
         } else {
             getSectionItemViewType(section, index)
         }
-
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -180,5 +179,4 @@ abstract class SectionedRecyclerViewAdapter<H : RecyclerView.ViewHolder, VH : Re
         internal const val TYPE_SECTION_HEADER = -1
         internal const val TYPE_ITEM = -2
     }
-
 }

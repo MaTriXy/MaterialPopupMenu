@@ -1,24 +1,27 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
-    ext.KOTLIN_VERSION = '1.2.31'
-    ext.ANDROID_GRADLE_PLUGIN_VERSION = '3.0.1'
-    ext.DOKKA_VERSION = '0.9.16'
-    ext.BINTRAY_VERSION = '1.7.3'
+    ext.KOTLIN_VERSION = '1.3.21'
+    ext.ANDROID_GRADLE_PLUGIN_VERSION = '4.1.0'
+    ext.DOKKA_VERSION = '0.9.18'
+    ext.BINTRAY_VERSION = '1.8.4'
+    ext.KORDAMP_VERSION = '0.15.1'
     repositories {
         google()
         jcenter()
         maven {
             url 'https://dl.bintray.com/kotlin/kotlin-eap'
         }
+        gradlePluginPortal()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$ANDROID_GRADLE_PLUGIN_VERSION"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
         classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:$DOKKA_VERSION"
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:$BINTRAY_VERSION"
+        classpath "org.kordamp.gradle:testing-gradle-plugin:$KORDAMP_VERSION"
     }
 }
+
+apply plugin: 'org.kordamp.gradle.testing'
 
 allprojects {
     repositories {
@@ -29,21 +32,31 @@ allprojects {
 
 configure(allprojects) {
     ext {
-        ANDROID_MIN_SDK_VERSION         = 16
-        ANDROID_TARGET_SDK_VERSION      = 27
-        ANDROID_COMPILE_SDK_VERSION     = 27
-        ANDROID_BUILD_TOOLS_VERSION     = '27.0.3'
+        ANDROID_MIN_SDK_VERSION             = 19
+        ANDROID_TARGET_SDK_VERSION          = 29
+        ANDROID_COMPILE_SDK_VERSION         = 29
+        ANDROID_BUILD_TOOLS_VERSION         = '29.0.2'
 
-        ANDROID_SUPPORT_LIBRARY_VERSION = '27.1.0'
-        CONSTRAINT_LAYOUT_VERSION       = '1.0.2'
-        BUTTERKNIFE_VERSION             = '8.7.0'
+        ANDROIDX_CORE_VERSION               = '1.0.1'
+        ANDROIDX_ANNOTATION_VERSION         = '1.0.0'
+        ANDROIDX_APPCOMPAT_VERSION          = '1.0.2'
+        ANDROIDX_RECYCLERVIEW_VERSION       = '1.0.0'
 
-        JUNIT_VERSION                   = '4.12'
-        HAMCREST_VERSION                = '1.3'
-        MOCKITO_KOTLIN_VERSION          = '1.5.0'
+        ANDROIDX_CONSTRAINTLAYOUT_VERSION   = '1.1.3'
+        ANDROIDX_CORE_KTX_VERSION           = '1.1.0'
+        MATERIAL_COMPONENTS_VERSION         = '1.2.1'
+
+        JUNIT_VERSION                       = '4.13.1'
+        ARCHUNIT_VERSION                    = '0.14.1'
+        HAMCREST_VERSION                    = '1.3'
+        MOCKITO_KOTLIN_VERSION              = '2.1.0'
+
+        ANDROIDX_TEST_CORE_VERSION          = "1.3.0"
+        RUNNER_VERSION                      = "1.3.0"
+        RULES_VERSION                       = "1.3.0"
+        ESPRESSO_VERSION                    = "3.3.0"
+        JUNIT_EXT_VERSION                   = "1.1.2"
+        ROBOLECTRIC_VERSION                 = "4.4"
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}

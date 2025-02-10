@@ -1,11 +1,12 @@
 package com.github.zawadz88.materialpopupmenu
 
 import android.graphics.drawable.Drawable
-import android.support.annotation.ColorInt
-import android.support.annotation.DrawableRes
-import android.support.annotation.LayoutRes
 import android.view.Gravity
 import android.view.View
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
+import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 
 /**
  * Builder for creating a [MaterialPopupMenu].
@@ -19,20 +20,41 @@ import android.view.View
 class MaterialPopupMenuBuilder {
 
     /**
-     * Style of the popup menu. Default is [R.style.Widget_MPM_Menu].
+     * Style of the popup menu.
      *
      * For dark themes you should use [R.style.Widget_MPM_Menu_Dark].
      *
-     * You can also provide your own style, however make sure that all of the attributes
-     * that are declared in [R.style.Widget_MPM_Menu] are also declared in your style.
+     * Setting this to `0` will make the popup use the default style resolved based on context
+     * passed to [MaterialPopupMenu.show] function. You can customize that default style by defining
+     * [R.attr.materialPopupMenuStyle] in your theme style.
+     *
+     * *NOTE:* make sure that all of the attributes that are declared in [R.style.Widget_MPM_Menu]
+     * are also declared in your style.
      */
-    var style: Int = R.style.Widget_MPM_Menu
+    var style: Int = 0
 
     /**
      * Gravity of the dropdown list. This is commonly used to
      * set gravity to START or END for alignment with the anchor.
+     * Setting [Gravity.BOTTOM] will anchor the dropdown list below the view.
      */
     var dropdownGravity: Int = Gravity.NO_GRAVITY
+
+    /**
+     * Setting this to a non-zero value will force the width of the popup menu to be exactly this value.
+     * If set to 0, the default mechanism for measuring popup menu width will be applied.
+     */
+    var fixedContentWidthInPx: Int = 0
+
+    /**
+     * Setting this to non-`null` value will override `android:dropDownVerticalOffset` set by the style applied in [style].
+     */
+    var dropDownVerticalOffset: Int? = null
+
+    /**
+     * Setting this to non-`null` value will override `android:dropDownHorizontalOffset` set by the style applied in [style].
+     */
+    var dropDownHorizontalOffset: Int? = null
 
     private val sectionHolderList = arrayListOf<SectionHolder>()
 
@@ -56,11 +78,18 @@ class MaterialPopupMenuBuilder {
      * - see class description for validation details.
      */
     fun build(): MaterialPopupMenu {
-        check(sectionHolderList.isNotEmpty(), { "Popup menu sections cannot be empty!" })
+        require(sectionHolderList.isNotEmpty()) { "Popup menu sections cannot be empty!" }
 
         val sections = sectionHolderList.map { it.convertToPopupMenuSection() }
 
-        return MaterialPopupMenu(style, dropdownGravity, sections)
+        return MaterialPopupMenu(
+            style = style,
+            dropdownGravity = dropdownGravity,
+            sections = sections,
+            fixedContentWidthInPx = fixedContentWidthInPx,
+            dropDownVerticalOffset = dropDownVerticalOffset,
+            dropDownHorizontalOffset = dropDownHorizontalOffset
+        )
     }
 
     /**
@@ -73,7 +102,7 @@ class MaterialPopupMenuBuilder {
          * Optional section holder. *null* by default.
          * If the title is not *null* it will be displayed in the menu.
          */
-        var title: String? = null
+        var title: CharSequence? = null
 
         private val itemsHolderList = arrayListOf<AbstractItemHolder>()
 
@@ -102,13 +131,12 @@ class MaterialPopupMenuBuilder {
         }
 
         internal fun convertToPopupMenuSection(): MaterialPopupMenu.PopupMenuSection {
-            check(itemsHolderList.isNotEmpty(), { "Section '$this' has no items!" })
+            require(itemsHolderList.isNotEmpty()) { "Section '$this' has no items!" }
             return MaterialPopupMenu.PopupMenuSection(
-                    title = title,
-                    items = itemsHolderList.map { it.convertToPopupMenuItem() }
+                title = title,
+                items = itemsHolderList.map { it.convertToPopupMenuItem() }
             )
         }
-
     }
 
     /**
@@ -118,9 +146,26 @@ class MaterialPopupMenuBuilder {
     class ItemHolder : AbstractItemHolder() {
 
         /**
-         * Item label. This is a required field and must not be *null*.
+         * Item label.
+         *
+         * This is a required field and must not be *null*, unless you specify a label
+         * using [labelRes].
+         *
+         * If both [label] and [labelRes] are set [label] will be used.
          */
-        var label: String? = null
+        var label: CharSequence? = null
+
+        /**
+         * Item label.
+         *
+         * This must be a valid string resource ID if set.
+         * This is a required field and must not be *0*, unless you specify a label
+         * using [label].
+         *
+         * If both [label] and [labelRes] are set [label] will be used.
+         */
+        @StringRes
+        var labelRes: Int = 0
 
         /**
          * Optional text color of the label. If not set or 0 the default color will be used.
@@ -161,20 +206,31 @@ class MaterialPopupMenuBuilder {
         @ColorInt
         var iconColor: Int = 0
 
+        /**
+         * Optional. If set to *true* this will show a "menu-end" icon, which indicates that there might be a submenu shown.
+         * *false* by default.
+         */
+        var hasNestedItems: Boolean = false
+
         override fun toString(): String {
-            return "ItemHolder(label=$label, labelColor=$labelColor, icon=$icon, iconDrawable=$iconDrawable, iconColor=$iconColor, callback=$callback)"
+            return "ItemHolder(label=$label, labelRes=$labelRes, labelColor=$labelColor, icon=$icon, iconDrawable=$iconDrawable, iconColor=$iconColor, hasNestedItems=$hasNestedItems, viewBoundCallback=$viewBoundCallback, callback=$callback, dismissOnSelect=$dismissOnSelect)"
         }
 
         override fun convertToPopupMenuItem(): MaterialPopupMenu.PopupMenuItem {
+            require(label != null || labelRes != 0) { "Item '$this' does not have a label" }
             return MaterialPopupMenu.PopupMenuItem(
-                    label = checkNotNull(label, { "Item '$this' does not have a label" }),
-                    labelColor = labelColor,
-                    icon = icon,
-                    iconDrawable = iconDrawable,
-                    iconColor = iconColor,
-                    callback = callback)
+                label = label,
+                labelRes = labelRes,
+                labelColor = labelColor,
+                icon = icon,
+                iconDrawable = iconDrawable,
+                iconColor = iconColor,
+                hasNestedItems = hasNestedItems,
+                viewBoundCallback = resolveViewBoundCallback(),
+                callback = callback,
+                dismissOnSelect = dismissOnSelect
+            )
         }
-
     }
 
     /**
@@ -189,24 +245,19 @@ class MaterialPopupMenuBuilder {
         @LayoutRes
         var layoutResId: Int = 0
 
-        /**
-         * Callback to be invoked once the custom item view gets created and bound.
-         * It is to be used when some views inside need to be updated once inflated.
-         */
-        var viewBoundCallback: (View) -> Unit = {}
-
         override fun toString(): String {
-            return "CustomItemHolder(layoutResId=$layoutResId, viewBoundCallback=$viewBoundCallback, callback=$callback)"
+            return "CustomItemHolder(layoutResId=$layoutResId, viewBoundCallback=$viewBoundCallback, callback=$callback, dismissOnSelect=$dismissOnSelect)"
         }
 
         override fun convertToPopupMenuItem(): MaterialPopupMenu.PopupMenuCustomItem {
-            check(layoutResId != 0, { "Layout resource ID must be set for a custom item!" })
+            require(layoutResId != 0) { "Layout resource ID must be set for a custom item!" }
             return MaterialPopupMenu.PopupMenuCustomItem(
-                    layoutResId = layoutResId,
-                    viewBoundCallback = viewBoundCallback,
-                    callback = callback)
+                layoutResId = layoutResId,
+                viewBoundCallback = resolveViewBoundCallback(),
+                callback = callback,
+                dismissOnSelect = dismissOnSelect
+            )
         }
-
     }
 
     @PopupMenuMarker
@@ -217,10 +268,28 @@ class MaterialPopupMenuBuilder {
          */
         var callback: () -> Unit = {}
 
+        /**
+         * Whether to dismiss the popup once an item gets selected.
+         * Defaults to `true`.
+         */
+        var dismissOnSelect: Boolean = true
+
+        /**
+         * Callback to be invoked once the item view gets created and bound.
+         * It is to be used when some views inside need to be updated once inflated.
+         *
+         * You can set this to [ViewBoundCallback] to gain access to additional
+         * features.
+         *
+         * @see ViewBoundCallback
+         */
+        var viewBoundCallback: (View) -> Unit = {}
+
         internal abstract fun convertToPopupMenuItem(): MaterialPopupMenu.AbstractPopupMenuItem
 
+        protected fun resolveViewBoundCallback() = (viewBoundCallback as? ViewBoundCallback
+            ?: ViewBoundCallback { viewBoundCallback(it) })
     }
-
 }
 
 /**
